@@ -275,7 +275,12 @@ ${hour.toString().padStart(2,'0')}:${minute.toString().padStart(2,'0')}
         }
     }
 
-    html += `<div class="note">Xanh: tốt • Cam: tạm • Đỏ: không nên</div>`;
+    html += `
+<div class="note">
+    <span style="color:#2ecc71;font-weight:bold;">Xanh</span>: tốt • 
+    <span style="color:#f39c12;font-weight:bold;">Cam</span>: tạm • 
+    <span style="color:#e74c3c;font-weight:bold;">Đỏ</span>: không nên
+</div>`;
     document.getElementById("result").innerHTML = html;
 }
 
