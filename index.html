@@ -1,1 +1,280 @@
-<!DOCTYPE html> <html lang="vi"> <head> <meta charset="UTF-8"> <title>GIẤC NGỦ KHỎE</title> <style> body { font-family: Arial, sans-serif; background: #f4f6f8; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; transition: 0.3s; } body.dark { background: #1e1e1e; color: white; } .container { background: white; padding: 30px 28px; border-radius: 18px; width: 360px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.12); transition: 0.3s; } body.dark .container { background: #2a2a2a; } h1 { margin: 0; font-size: 24px; text-align: center; } .desc { font-size: 13px; color: gray; margin: 12px 0 18px; text-align: center; line-height: 1.4; } body.dark .desc { color: #bbb; } select { padding: 8px; border-radius: 8px; border: 1px solid #ddd; outline: none; margin-top: 10px; width: 100%; text-align: center; } body.dark select { background: #3a3a3a; color: white; border: 1px solid #555; } .time-box { margin-top: 14px; display: flex; justify-content: center; align-items: center; gap: 10px; } .time-box select { width: 90px; text-align: center; } #labelText { margin-top: 14px; font-size: 14px; text-align: center; } button.main { margin-top: 18px; padding: 10px 18px; background: #333; color: white; border: none; border-radius: 10px; cursor: pointer; width: 60%; } .result { margin-top: 20px; text-align: center; } .time { margin: 6px auto; padding: 8px; border-radius: 8px; width: 80%; background: rgba(0,0,0,0.04); } body.dark .time { background: rgba(255,255,255,0.05); } .good { color: #2ecc71; font-weight: bold; } .ok { color: #f39c12; font-weight: bold; } .bad { color: #e74c3c; font-weight: bold; } .note { margin-top: 10px; font-size: 12px; color: #666; text-align: center; } body.dark .note { color: #ccc; } .theme-btn { position: fixed; top: 16px; right: 16px; width: 52px; height: 26px; border-radius: 999px; border: none; cursor: pointer; background: #dcdcdc; box-shadow: 0 3px 10px rgba(0,0,0,0.2); } .theme-btn::before { content: ""; position: absolute; width: 20px; height: 20px; border-radius: 50%; background: white; top: 3px; left: 3px; transition: 0.3s; } body.dark .theme-btn { background: #444; } body.dark .theme-btn::before { transform: translateX(26px); } </style> </head> <body> <button class="theme-btn" onclick="toggleDark()"></button> <div class="container"> <h1>GIẤC NGỦ KHỎE</h1> <div class="desc"> Tối ưu giờ ngủ và thức dậy để bạn luôn tỉnh táo, khỏe khoắn và tràn đầy năng lượng. </div> <select id="mode"> <option value="wake">Tính giờ nên ngủ từ giờ muốn thức dậy</option> <option value="sleep">Tính giờ nên thức dậy từ giờ muốn ngủ</option> </select> <div id="labelText">Tôi muốn thức dậy vào lúc:</div> <div class="time-box"> <select id="hour"></select> : <select id="minute"></select> </div> <button class="main" onclick="calculate()">Tính</button> <div class="result" id="result"></div> </div> <script> function toggleDark() { document.body.classList.toggle("dark"); } let hour = document.getElementById("hour"); for (let i = 0; i < 24; i++) { let opt = document.createElement("option"); opt.value = i; opt.text = i.toString().padStart(2, "0"); hour.appendChild(opt); } let minute = document.getElementById("minute"); for (let i = 0; i < 60; i++) { let opt = document.createElement("option"); opt.value = i; opt.text = i.toString().padStart(2, "0"); minute.appendChild(opt); } document.getElementById("mode").addEventListener("change", function() { document.getElementById("labelText").innerText = this.value === "wake" ? "Tôi muốn thức dậy vào lúc:" : "Tôi muốn đi ngủ vào lúc:"; }); function calculate() { let mode = document.getElementById("mode").value; let h = parseInt(document.getElementById("hour").value); let m = parseInt(document.getElementById("minute").value); let html = ""; if (mode === "wake") { html = "Giờ nên đi ngủ:<br>"; for (let i = 6; i >= 3; i--) { let total = h * 60 + m - i * 90; let hour = Math.floor((total / 60) % 24); let minute = total % 60; if (minute < 0) { minute += 60; hour--; } if (hour < 0) hour += 24; let cls = i >= 5 ? "good" : (i === 4 ? "ok" : "bad"); html += <div class="time ${cls}"> ${hour.toString().padStart(2,'0')}:${minute.toString().padStart(2,'0')} </div>; } } else { html = "Giờ nên thức dậy:<br>"; for (let i = 3; i <= 6; i++) { let total = h * 60 + m + i * 90; let hour = Math.floor((total / 60) % 24); let minute = total % 60; if (minute < 0) { minute += 60; hour--; } if (hour < 0) hour += 24; let cls = i >= 5 ? "good" : (i === 4 ? "ok" : "bad"); html += <div class="time ${cls}"> ${hour.toString().padStart(2,'0')}:${minute.toString().padStart(2,'0')} </div>; } } html += <div class="note"> <span style="color:#2ecc71;font-weight:bold;">Xanh</span>: tốt | <span style="color:#f39c12;font-weight:bold;">Cam</span>: tạm | <span style="color:#e74c3c;font-weight:bold;">Đỏ</span>: không nên </div>; document.getElementById("result").innerHTML = html; } </script> </body> </html>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>GIẤC NGỦ KHỎE</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    transition: 0.3s;
+}
+
+body.dark {
+    background: #1e1e1e;
+    color: white;
+}
+
+.container {
+    background: white;
+    padding: 30px 28px;
+    border-radius: 18px;
+    width: 360px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    transition: 0.3s;
+}
+
+body.dark .container {
+    background: #2a2a2a;
+}
+
+h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.desc {
+    font-size: 13px;
+    color: gray;
+    margin: 12px 0 18px;
+    line-height: 1.4;
+}
+
+body.dark .desc {
+    color: #bbb;
+}
+
+select {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+body.dark select {
+    background: #3a3a3a;
+    color: white;
+    border: 1px solid #555;
+}
+
+.time-box {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.time-box select {
+    width: 90px;
+}
+
+#labelText {
+    margin-top: 14px;
+    font-size: 14px;
+}
+
+button.main {
+    margin-top: 18px;
+    padding: 10px 18px;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 60%;
+}
+
+.result {
+    margin-top: 20px;
+}
+
+.time {
+    margin: 6px auto;
+    padding: 8px;
+    border-radius: 8px;
+    width: 80%;
+    background: rgba(0,0,0,0.04);
+}
+
+body.dark .time {
+    background: rgba(255,255,255,0.05);
+}
+
+.good { color: #2ecc71; font-weight: bold; }
+.ok   { color: #f39c12; font-weight: bold; }
+.bad  { color: #e74c3c; font-weight: bold; }
+
+.note {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #666;
+}
+
+body.dark .note {
+    color: #ccc;
+}
+
+.theme-btn {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 52px;
+    height: 26px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    background: #dcdcdc;
+}
+
+.theme-btn::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    top: 3px;
+    left: 3px;
+    transition: 0.3s;
+}
+
+body.dark .theme-btn {
+    background: #444;
+}
+
+body.dark .theme-btn::before {
+    transform: translateX(26px);
+}
+</style>
+</head>
+
+<body>
+
+<button class="theme-btn" onclick="toggleDark()"></button>
+
+<div class="container">
+    <h1>GIẤC NGỦ KHỎE</h1>
+
+    <div class="desc">
+        Tối ưu giờ ngủ và thức dậy để bạn luôn tỉnh táo, khỏe khoắn và tràn đầy năng lượng.
+    </div>
+
+    <select id="mode">
+        <option value="wake">Tính giờ nên ngủ từ giờ muốn thức dậy</option>
+        <option value="sleep">Tính giờ nên thức dậy từ giờ muốn ngủ</option>
+    </select>
+
+    <div id="labelText">Tôi muốn thức dậy vào lúc:</div>
+
+    <div class="time-box">
+        <select id="hour"></select> :
+        <select id="minute"></select>
+    </div>
+
+    <button class="main" onclick="calculate()">Tính</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+function toggleDark() {
+    document.body.classList.toggle("dark");
+}
+
+let hour = document.getElementById("hour");
+for (let i = 0; i < 24; i++) {
+    let opt = document.createElement("option");
+    opt.value = i;
+    opt.text = i.toString().padStart(2, "0");
+    hour.appendChild(opt);
+}
+
+let minute = document.getElementById("minute");
+for (let i = 0; i < 60; i++) {
+    let opt = document.createElement("option");
+    opt.value = i;
+    opt.text = i.toString().padStart(2, "0");
+    minute.appendChild(opt);
+}
+
+document.getElementById("mode").addEventListener("change", function () {
+    document.getElementById("labelText").innerText =
+        this.value === "wake"
+        ? "Tôi muốn thức dậy vào lúc:"
+        : "Tôi muốn đi ngủ vào lúc:";
+});
+
+function calculate() {
+    let mode = document.getElementById("mode").value;
+    let h = parseInt(document.getElementById("hour").value);
+    let m = parseInt(document.getElementById("minute").value);
+
+    let html = "";
+
+    if (mode === "wake") {
+        html = "Giờ nên đi ngủ:<br>";
+
+        for (let i = 6; i >= 3; i--) {
+            let total = h * 60 + m - i * 90;
+            let hour = Math.floor((total / 60) % 24);
+            let minute = total % 60;
+
+            if (minute < 0) {
+                minute += 60;
+                hour--;
+            }
+            if (hour < 0) hour += 24;
+
+            let cls = i >= 5 ? "good" : (i === 4 ? "ok" : "bad");
+
+            html += `<div class="time ${cls}">
+${hour.toString().padStart(2,'0')}:${minute.toString().padStart(2,'0')}
+</div>`;
+        }
+
+    } else {
+        html = "Giờ nên thức dậy:<br>";
+
+        for (let i = 3; i <= 6; i++) {
+            let total = h * 60 + m + i * 90;
+            let hour = Math.floor((total / 60) % 24);
+            let minute = total % 60;
+
+            if (minute < 0) {
+                minute += 60;
+                hour--;
+            }
+            if (hour < 0) hour += 24;
+
+            let cls = i >= 5 ? "good" : (i === 4 ? "ok" : "bad");
+
+            html += `<div class="time ${cls}">
+${hour.toString().padStart(2,'0')}:${minute.toString().padStart(2,'0')}
+</div>`;
+        }
+    }
+
+    html += `
+<div class="note">
+    <span style="color:#2ecc71;font-weight:bold;">Xanh</span>: tốt |
+    <span style="color:#f39c12;font-weight:bold;">Cam</span>: tạm |
+    <span style="color:#e74c3c;font-weight:bold;">Đỏ</span>: không nên
+</div>`;
+
+    document.getElementById("result").innerHTML = html;
+}
+</script>
+
+</body>
+</html>
