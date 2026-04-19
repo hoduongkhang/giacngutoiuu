@@ -24,7 +24,7 @@ body.dark {
 .container {
     background: white;
     padding: 30px;
-    border-radius: 10px;
+    border-radius: 12px;
     width: 340px;
     text-align: center;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -33,18 +33,13 @@ body.dark {
 
 body.dark .container {
     background: #2a2a2a;
-    color: white;
 }
 
-h1 {
-    margin-bottom: 5px;
-    font-size: 22px;
-}
-
+/* mô tả */
 .desc {
     font-size: 13px;
-    margin-bottom: 15px;
     color: gray;
+    margin-bottom: 15px;
 }
 
 body.dark .desc {
@@ -62,7 +57,7 @@ select, input {
     font-size: 14px;
 }
 
-button {
+button.main {
     margin-top: 15px;
     padding: 8px 16px;
     background: #333;
@@ -71,11 +66,41 @@ button {
     cursor: pointer;
 }
 
-/* toggle dark mode */
-.toggle {
-    margin-top: 10px;
+/* toggle */
+.theme-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    width: 48px;
+    height: 24px;
+    border-radius: 999px;
+    border: none;
     cursor: pointer;
-    font-size: 14px;
+    background: #dcdcdc;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+/* chấm tròn */
+.theme-btn::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: white;
+    top: 3px;
+    left: 3px;
+    transition: 0.3s;
+}
+
+body.dark .theme-btn {
+    background: #444;
+}
+
+body.dark .theme-btn::before {
+    transform: translateX(24px);
+    background: #f5f5f5;
 }
 
 .result {
@@ -105,17 +130,14 @@ body.dark .note {
 
 <body>
 
+<!-- TOGGLE -->
+<button class="theme-btn" onclick="toggleDark()"></button>
+
 <div class="container">
     <h1>SleepSync</h1>
 
-    <!-- mô tả -->
     <div class="desc">
-        Ứng dụng giúp bạn tính giờ ngủ / thức dậy hợp lý theo chu kỳ giấc ngủ 90 phút.
-    </div>
-
-    <!-- DARK MODE TOGGLE -->
-    <div class="toggle" onclick="toggleDark()">
-        🌙 / ☀️ Chế độ sáng tối
+        Tính giờ ngủ / thức dậy dựa trên chu kỳ giấc ngủ 90 phút để bạn ngủ hợp lý hơn.
     </div>
 
     <select id="mode">
@@ -125,29 +147,26 @@ body.dark .note {
 
     <div id="labelText">Tôi muốn thức dậy vào lúc:</div>
 
-    <!-- 24H TIME -->
-    <input type="time" id="timeInput" step="60">
+    <!-- 24h -->
+    <input type="time" id="timeInput">
 
     <br>
-    <button onclick="calculate()">Tính</button>
+    <button class="main" onclick="calculate()">Tính</button>
 
     <div class="result" id="result"></div>
 </div>
 
 <script>
 
-// dark mode
 function toggleDark() {
     document.body.classList.toggle("dark");
 }
 
-// đổi text theo mode
 document.getElementById("mode").addEventListener("change", function() {
-    let text = this.value === "wake"
+    document.getElementById("labelText").innerText =
+        this.value === "wake"
         ? "Tôi muốn thức dậy vào lúc:"
         : "Tôi muốn đi ngủ vào lúc:";
-    
-    document.getElementById("labelText").innerText = text;
 });
 
 function calculate() {
@@ -179,8 +198,7 @@ function calculate() {
             let cls = i >= 5 ? "good" : (i === 4 ? "ok" : "bad");
 
             html += `<div class="time ${cls}">
-                ${hour.toString().padStart(2, '0')}:
-                ${minute.toString().padStart(2, '0')}
+                ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}
             </div>`;
         }
 
@@ -201,8 +219,7 @@ function calculate() {
             let cls = i >= 5 ? "good" : (i === 4 ? "ok" : "bad");
 
             html += `<div class="time ${cls}">
-                ${hour.toString().padStart(2, '0')}:
-                ${minute.toString().padStart(2, '0')}
+                ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}
             </div>`;
         }
     }
@@ -213,6 +230,7 @@ function calculate() {
 
     document.getElementById("result").innerHTML = html;
 }
+
 </script>
 
 </body>
