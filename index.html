@@ -2,190 +2,179 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GIẤC NGỦ KHỎE</title>
 
 <style>
+* {
+    box-sizing: border-box;
+    font-family: system-ui, Arial;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
+    margin: 0;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    background: #f4f6f8;
     transition: 0.3s;
 }
 
 body.dark {
-    background: #1e1e1e;
+    background: #0f1115;
     color: white;
 }
 
-.container {
+.card {
+    width: 92%;
+    max-width: 380px;
+    padding: 24px;
+    border-radius: 20px;
     background: white;
-    padding: 30px 28px;
-    border-radius: 18px;
-    width: 360px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
     text-align: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
     transition: 0.3s;
 }
 
-body.dark .container {
-    background: #2a2a2a;
+body.dark .card {
+    background: #1b1f27;
 }
 
 h1 {
     margin: 0;
-    font-size: 24px;
+    font-size: 22px;
+    letter-spacing: 1px;
 }
 
-.desc {
+.sub {
     font-size: 13px;
-    color: gray;
-    margin: 12px 0 18px;
-    line-height: 1.4;
+    opacity: 0.7;
+    margin: 10px 0 18px;
 }
 
-body.dark .desc {
-    color: #bbb;
+select, button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    margin-top: 10px;
 }
 
 select {
-    padding: 8px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    outline: none;
-    margin-top: 10px;
-    width: 100%;
-    text-align: center;
+    background: #f1f3f5;
 }
 
 body.dark select {
-    background: #3a3a3a;
+    background: #2a2f3a;
     color: white;
-    border: 1px solid #555;
-}
-
-.time-box {
-    margin-top: 14px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-}
-
-.time-box select {
-    width: 90px;
-}
-
-#labelText {
-    margin-top: 14px;
-    font-size: 14px;
-}
-
-button.main {
-    margin-top: 18px;
-    padding: 10px 18px;
-    background: #333;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    width: 60%;
-}
-
-.result {
-    margin-top: 20px;
 }
 
 .time {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.time select {
+    width: 45%;
+}
+
+.btn {
+    background: #111;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    transform: scale(1.03);
+}
+
+body.dark .btn {
+    background: #fff;
+    color: black;
+}
+
+.result {
+    margin-top: 18px;
+}
+
+.box {
     margin: 6px auto;
-    padding: 8px;
-    border-radius: 8px;
-    width: 80%;
+    padding: 10px;
+    border-radius: 12px;
+    width: 90%;
     background: rgba(0,0,0,0.04);
 }
 
-body.dark .time {
+body.dark .box {
     background: rgba(255,255,255,0.05);
 }
 
 .good { color: #2ecc71; font-weight: bold; }
-.ok   { color: #f39c12; font-weight: bold; }
-.bad  { color: #e74c3c; font-weight: bold; }
+.ok { color: #f39c12; font-weight: bold; }
+.bad { color: #e74c3c; font-weight: bold; }
 
 .note {
-    margin-top: 10px;
     font-size: 12px;
-    color: #666;
+    margin-top: 10px;
+    opacity: 0.7;
 }
 
-body.dark .note {
-    color: #ccc;
-}
-
-.theme-btn {
+.toggle {
     position: fixed;
-    top: 16px;
-    right: 16px;
-    width: 52px;
-    height: 26px;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 14px;
     border-radius: 999px;
     border: none;
     cursor: pointer;
-    background: #dcdcdc;
+    background: #111;
+    color: white;
 }
 
-.theme-btn::before {
-    content: "";
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
+body.dark .toggle {
     background: white;
-    top: 3px;
-    left: 3px;
-    transition: 0.3s;
+    color: black;
 }
 
-body.dark .theme-btn {
-    background: #444;
-}
-
-body.dark .theme-btn::before {
-    transform: translateX(26px);
+/* mobile tối ưu */
+@media (max-width: 500px) {
+    .card {
+        padding: 18px;
+        border-radius: 16px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<button class="theme-btn" onclick="toggleDark()"></button>
+<div class="card">
 
-<div class="container">
     <h1>GIẤC NGỦ KHỎE</h1>
-
-    <div class="desc">
-        Tối ưu giờ ngủ và thức dậy để bạn luôn tỉnh táo, khỏe khoắn và tràn đầy năng lượng.
-    </div>
+    <div class="sub">Tối ưu giấc ngủ để bạn tỉnh táo hơn mỗi ngày</div>
 
     <select id="mode">
-        <option value="wake">Tính giờ nên ngủ từ giờ muốn thức dậy</option>
-        <option value="sleep">Tính giờ nên thức dậy từ giờ muốn ngủ</option>
+        <option value="wake">Tính giờ đi ngủ</option>
+        <option value="sleep">Tính giờ thức dậy</option>
     </select>
 
-    <div id="labelText">Tôi muốn thức dậy vào lúc:</div>
-
-    <div class="time-box">
-        <select id="hour"></select> :
+    <div class="time">
+        <select id="hour"></select>
         <select id="minute"></select>
     </div>
 
-    <button class="main" onclick="calculate()">Tính</button>
+    <button class="btn" onclick="calculate()">TÍNH</button>
 
     <div class="result" id="result"></div>
+
 </div>
+
+<button class="toggle" onclick="toggleDark()">Đổi giao diện</button>
 
 <script>
 function toggleDark() {
@@ -194,31 +183,25 @@ function toggleDark() {
 
 let hour = document.getElementById("hour");
 for (let i = 0; i < 24; i++) {
-    let opt = document.createElement("option");
-    opt.value = i;
-    opt.text = i.toString().padStart(2, "0");
-    hour.appendChild(opt);
+    hour.innerHTML += `<option value="${i}">${i.toString().padStart(2,'0')}</option>`;
 }
 
 let minute = document.getElementById("minute");
 for (let i = 0; i < 60; i++) {
-    let opt = document.createElement("option");
-    opt.value = i;
-    opt.text = i.toString().padStart(2, "0");
-    minute.appendChild(opt);
+    minute.innerHTML += `<option value="${i}">${i.toString().padStart(2,'0')}</option>`;
 }
 
 document.getElementById("mode").addEventListener("change", function () {
-    document.getElementById("labelText").innerText =
+    document.querySelector(".sub").innerText =
         this.value === "wake"
-        ? "Tôi muốn thức dậy vào lúc:"
-        : "Tôi muốn đi ngủ vào lúc:";
+        ? "Nhập giờ thức dậy"
+        : "Nhập giờ đi ngủ";
 });
 
 function calculate() {
     let mode = document.getElementById("mode").value;
-    let h = parseInt(document.getElementById("hour").value);
-    let m = parseInt(document.getElementById("minute").value);
+    let h = +document.getElementById("hour").value;
+    let m = +document.getElementById("minute").value;
 
     let html = "";
 
@@ -226,51 +209,36 @@ function calculate() {
         html = "Giờ nên đi ngủ:<br>";
 
         for (let i = 6; i >= 3; i--) {
-            let total = h * 60 + m - i * 90;
-            let hour = Math.floor((total / 60) % 24);
-            let minute = total % 60;
+            let t = h * 60 + m - i * 90;
+            let hh = (Math.floor(t / 60) + 24) % 24;
+            let mm = (t % 60 + 60) % 60;
 
-            if (minute < 0) {
-                minute += 60;
-                hour--;
-            }
-            if (hour < 0) hour += 24;
+            let cls = i >= 5 ? "good" : i === 4 ? "ok" : "bad";
 
-            let cls = i >= 5 ? "good" : (i === 4 ? "ok" : "bad");
-
-            html += `<div class="time ${cls}">
-${hour.toString().padStart(2,'0')}:${minute.toString().padStart(2,'0')}
-</div>`;
+            html += `<div class="box ${cls}">
+                ${hh.toString().padStart(2,'0')}:${mm.toString().padStart(2,'0')}
+            </div>`;
         }
 
     } else {
         html = "Giờ nên thức dậy:<br>";
 
         for (let i = 3; i <= 6; i++) {
-            let total = h * 60 + m + i * 90;
-            let hour = Math.floor((total / 60) % 24);
-            let minute = total % 60;
+            let t = h * 60 + m + i * 90;
+            let hh = (Math.floor(t / 60)) % 24;
+            let mm = t % 60;
 
-            if (minute < 0) {
-                minute += 60;
-                hour--;
-            }
-            if (hour < 0) hour += 24;
+            let cls = i >= 5 ? "good" : i === 4 ? "ok" : "bad";
 
-            let cls = i >= 5 ? "good" : (i === 4 ? "ok" : "bad");
-
-            html += `<div class="time ${cls}">
-${hour.toString().padStart(2,'0')}:${minute.toString().padStart(2,'0')}
-</div>`;
+            html += `<div class="box ${cls}">
+                ${hh.toString().padStart(2,'0')}:${mm.toString().padStart(2,'0')}
+            </div>`;
         }
     }
 
-    html += `
-<div class="note">
-    <span style="color:#2ecc71;font-weight:bold;">Xanh</span>: tốt |
-    <span style="color:#f39c12;font-weight:bold;">Cam</span>: tạm |
-    <span style="color:#e74c3c;font-weight:bold;">Đỏ</span>: không nên
-</div>`;
+    html += `<div class="note">
+        🟢 tốt | 🟠 tạm | 🔴 không nên
+    </div>`;
 
     document.getElementById("result").innerHTML = html;
 }
