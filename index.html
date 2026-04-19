@@ -6,116 +6,122 @@
 
 <style>
 body{
-    font-family: Arial, sans-serif;
-    background:#f4f6f8;
+    margin:0;
+    height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
-    margin:0;
+    font-family:Arial;
+    background:#0f172a;
 }
 
-.container{
-    background:white;
-    padding:30px;
-    border-radius:16px;
+.card{
     width:360px;
     text-align:center;
-    box-shadow:0 10px 25px rgba(0,0,0,0.12);
+    color:white;
 }
 
 h1{
     margin:0;
-    font-size:24px;
+    font-size:26px;
+    letter-spacing:1px;
+    color:#f5c542;
 }
 
 .desc{
     font-size:13px;
-    color:gray;
-    margin:12px 0 18px;
+    color:#aaa;
+    margin:10px 0 20px;
+    line-height:1.4;
 }
 
 select{
     width:100%;
-    padding:8px;
-    border-radius:8px;
+    padding:10px;
+    border:none;
+    border-radius:10px;
     margin-top:10px;
+    background:#1e293b;
+    color:white;
+    text-align:center;
 }
 
-.time-box{
-    margin-top:14px;
+.time{
+    margin-top:15px;
     display:flex;
     justify-content:center;
     gap:10px;
 }
 
-.time-box select{
+.time select{
     width:90px;
 }
 
-#labelText{
-    margin-top:14px;
+label{
+    display:block;
+    margin-top:15px;
     font-size:14px;
+    color:#ddd;
 }
 
 button{
     margin-top:18px;
     padding:10px;
     width:60%;
-    background:#333;
-    color:white;
     border:none;
     border-radius:10px;
+    background:#f5c542;
     cursor:pointer;
+    font-weight:bold;
 }
 
 .result{
     margin-top:20px;
 }
 
-.time{
+.item{
     margin:6px auto;
+    width:70%;
     padding:8px;
-    width:80%;
     border-radius:8px;
-    background:rgba(0,0,0,0.05);
+    background:#1e293b;
 }
 
-.good{color:green;font-weight:bold;}
-.ok{color:orange;font-weight:bold;}
-.bad{color:red;font-weight:bold;}
+.good{color:#22c55e;font-weight:bold;}
+.ok{color:#f59e0b;font-weight:bold;}
+.bad{color:#ef4444;font-weight:bold;}
 
 .note{
     margin-top:10px;
     font-size:12px;
-    color:gray;
+    color:#888;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="card">
 
 <h1>GIẤC NGỦ KHỎE</h1>
 
 <div class="desc">
-Tối ưu giờ ngủ và thức dậy để bạn tỉnh táo và khỏe khoắn hơn mỗi ngày.
+Tối ưu giấc ngủ để bạn tỉnh táo hơn và bắt đầu ngày mới nhẹ nhàng.
 </div>
 
 <select id="mode">
-    <option value="wake">Tính giờ nên ngủ từ giờ muốn thức dậy</option>
-    <option value="sleep">Tính giờ nên thức dậy từ giờ ngủ</option>
+<option value="wake">Tính giờ nên ngủ</option>
+<option value="sleep">Tính giờ nên thức dậy</option>
 </select>
 
-<div id="labelText">Tôi muốn thức dậy vào lúc:</div>
+<label id="labelText">Chọn giờ:</label>
 
-<div class="time-box">
-    <select id="hour"></select> :
-    <select id="minute"></select>
+<div class="time">
+<select id="hour"></select> :
+<select id="minute"></select>
 </div>
 
-<button onclick="calculate()">Tính</button>
+<button onclick="calc()">Tính</button>
 
 <div class="result" id="result"></div>
 
@@ -123,33 +129,25 @@ Tối ưu giờ ngủ và thức dậy để bạn tỉnh táo và khỏe khoắ
 
 <script>
 
-let hour = document.getElementById("hour");
+let h=document.getElementById("hour");
 for(let i=0;i<24;i++){
-    let opt=document.createElement("option");
-    opt.value=i;
-    opt.text=i.toString().padStart(2,"0");
-    hour.appendChild(opt);
+    h.innerHTML+=`<option value="${i}">${i.toString().padStart(2,"0")}</option>`;
 }
 
-let minute=document.getElementById("minute");
+let m=document.getElementById("minute");
 for(let i=0;i<60;i++){
-    let opt=document.createElement("option");
-    opt.value=i;
-    opt.text=i.toString().padStart(2,"0");
-    minute.appendChild(opt);
+    m.innerHTML+=`<option value="${i}">${i.toString().padStart(2,"0")}</option>`;
 }
 
-document.getElementById("mode").addEventListener("change",function(){
+document.getElementById("mode").onchange=function(){
     document.getElementById("labelText").innerText =
-    this.value==="wake"
-    ? "Tôi muốn thức dậy vào lúc:"
-    : "Tôi muốn đi ngủ vào lúc:";
-});
+    this.value==="wake"?"Nhập giờ muốn thức dậy":"Nhập giờ muốn đi ngủ";
+}
 
-function calculate(){
+function calc(){
     let mode=document.getElementById("mode").value;
-    let h=parseInt(hour.value);
-    let m=parseInt(minute.value);
+    let hh=parseInt(h.value);
+    let mm=parseInt(m.value);
 
     let html="";
 
@@ -157,18 +155,17 @@ function calculate(){
         html="Giờ nên đi ngủ:<br>";
 
         for(let i=6;i>=3;i--){
-            let total=h*60+m-i*90;
-            let hh=Math.floor((total/60)%24);
-            let mm=total%60;
+            let t=hh*60+mm-i*90;
+            let H=Math.floor((t/60)%24);
+            let M=t%60;
 
-            if(mm<0){mm+=60;hh--;}
-            if(hh<0)hh+=24;
+            if(M<0){M+=60;H--;}
+            if(H<0)H+=24;
 
-            let cls=i>=5?"good":i===4?"ok":"bad";
+            let c=i>=5?"good":i===4?"ok":"bad";
 
-            html+=`
-            <div class="time ${cls}">
-                ${hh.toString().padStart(2,"0")}:${mm.toString().padStart(2,"0")}
+            html+=`<div class="item ${c}">
+                ${H.toString().padStart(2,"0")}:${M.toString().padStart(2,"0")}
             </div>`;
         }
     }
@@ -176,18 +173,14 @@ function calculate(){
         html="Giờ nên thức dậy:<br>";
 
         for(let i=3;i<=6;i++){
-            let total=h*60+m+i*90;
-            let hh=Math.floor((total/60)%24);
-            let mm=total%60;
+            let t=hh*60+mm+i*90;
+            let H=Math.floor((t/60)%24);
+            let M=t%60;
 
-            if(mm<0){mm+=60;hh--;}
-            if(hh<0)hh+=24;
+            let c=i>=5?"good":i===4?"ok":"bad";
 
-            let cls=i>=5?"good":i===4?"ok":"bad";
-
-            html+=`
-            <div class="time ${cls}">
-                ${hh.toString().padStart(2,"0")}:${mm.toString().padStart(2,"0")}
+            html+=`<div class="item ${c}">
+                ${H.toString().padStart(2,"0")}:${M.toString().padStart(2,"0")}
             </div>`;
         }
     }
